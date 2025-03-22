@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Service MySQL
+  mysql_db:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: transport_db
+#      MYSQL_USER: root
+      MYSQL_PASSWORD: Lawliet2004
+      MYSQL_ROOT_PASSWORD: Lawliet2004
+    ports:
+      - "3306:3306"  # Expose MySQL sur le port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql  # Pour persister les données
+    networks:
+      - transport_network
+
+  # Service Laravel
+  laravel_app:
+    image: transport-backend
+    container_name: laravel_app
+    restart: always
+    depends_on:
+      - mysql_db
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql_db
+      DB_PORT: 3306
+      DB_DATABASE: transport_db
+      DB_USERNAME: root
+      DB_PASSWORD: Lawliet2004
+    ports:
+      - "8000:8000"  # Expose Laravel sur le port 8000
+    networks:
+      - transport_network
+
+  # Service PhpMyAdmin (interface graphique)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql_db
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"  # Accès à PhpMyAdmin sur le port 8080
+    depends_on:
+      - mysql_db
+    networks:
+      - transport_network
+
+  # Service Angular (frontend)
+  angular_app:
+    image: transport-frontend
+    container_name: angular_app
+    restart: always
+    ports:
+      - "4200:80"  # Accès à Angular sur le port 4200
+    depends_on:
+      - laravel_app
+    networks:
+      - transport_network
+
+# Volumes persistants
+volumes:
+  mysql_data:
+
+# Réseaux
+networks:
+  transport_network:
+    driver: bridge
