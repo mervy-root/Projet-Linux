@@ -17,10 +17,6 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 # Installer les dépendances PHP
 RUN composer install
-# Copier le fichier .env.example en .env
-RUN cp .env.example .env
-# Donner les permissions nécessaires
-RUN chmod 777 .env
 
 RUN php artisan key:generate
 
