@@ -16,14 +16,21 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - transport_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      retries: 5
+      interval: 5s
 
   # Service Laravel (Backend)
   laravel_app:
-    build: ./backend  # On construit l'image à partir du Dockerfile dans backend/
+    build: ./backend
     container_name: laravel_app
     restart: always
+    volumes:
+      - ./backend:/var/www/html
     depends_on:
-      - mysql_db
+      mysql_db:
+        condition: service_healthy
     environment:
       DB_CONNECTION: mysql
       DB_HOST: mysql_db
@@ -52,7 +59,7 @@ services:
 
   # Service Angular (Frontend)
   angular_app:
-    build: ./  # On construit l'image à partir du Dockerfile dans frontend/
+    build: ./
     container_name: angular_app
     restart: always
     ports:

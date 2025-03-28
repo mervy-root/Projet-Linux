@@ -2,9 +2,10 @@
   "name": "transport-app",
   "version": "0.0.0",
   "scripts": {
+    "dev": "vite",
+    "build": "ng build",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:transport-app": "node dist/transport-app/server/server.mjs"
@@ -39,6 +40,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.2"
+    "laravel-vite-plugin": "^1.2.0",
+    "typescript": "~5.4.2",
+    "vite": "^5.4.15"
   }
 }
