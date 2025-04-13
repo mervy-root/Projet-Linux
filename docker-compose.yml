@@ -1,10 +1,10 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   # Service MySQL
-  mysql_db:
-    image: mysql:latest
-    container_name: mysql_db
+  mysql__db:
+    image: l80000000/mysql_db
+    container_name: mysql__db
     restart: always
     environment:
       MYSQL_DATABASE: transport_db
@@ -22,18 +22,18 @@ services:
       interval: 5s
 
   # Service Laravel (Backend)
-  laravel_app:
-    build: ./backend
-    container_name: laravel_app
+  laravel__app:
+    image: l80000000/projet-linux-laravel_app:latest
+    container_name: laravel__app
     restart: always
     volumes:
       - ./backend:/var/www/html
     depends_on:
-      mysql_db:
+      mysql__db:
         condition: service_healthy
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: mysql_db
+      DB_HOST: mysql__db
       DB_PORT: 3306
       DB_DATABASE: transport_db
       DB_USERNAME: root
@@ -45,27 +45,27 @@ services:
 
   # Service PhpMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: l80000000/phpmyadmin
     container_name: phpmyadmin
     environment:
-      PMA_HOST: mysql_db
+      PMA_HOST: mysql__db
       PMA_PORT: 3306
     ports:
       - "8080:80"
     depends_on:
-      - mysql_db
+      - mysql__db
     networks:
       - transport_network
 
   # Service Angular (Frontend)
-  angular_app:
-    build: ./
-    container_name: angular_app
+  angular__app:
+    image: l80000000/projet-linux-angular_app:latest
+    container_name: angular__app
     restart: always
     ports:
       - "4200:80"
     depends_on:
-      - laravel_app
+      - laravel__app
     networks:
       - transport_network
 
