@@ -3,7 +3,7 @@
 services:
   # Service MySQL
   mysql__db:
-    image: l80000000/mysql_db
+    image: l80000000/mysql_home
     container_name: mysql__db
     restart: always
     environment:
