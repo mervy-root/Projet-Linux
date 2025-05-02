@@ -45,7 +45,7 @@ services:
 
   # Service PhpMyAdmin
   phpmyadmin:
-    image: l80000000/phpmyadmin
+    image: l80000000/php_myadmin
     container_name: phpmyadmin
     environment:
       PMA_HOST: mysql__db
